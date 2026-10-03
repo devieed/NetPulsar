@@ -1,0 +1,23 @@
+<div class="term">
+  <div class="title" data-drag data-chrome>
+    <span>root@<span data-host data-field="host"></span> — netpulsar<span class="caret">_</span></span>
+    <div class="actions">
+      <button type="button" data-action="pin" data-i18n-title="action.pin" title="置顶">⌖</button>
+      <button type="button" data-action="settings" data-i18n-title="action.settings" title="设置">⚙</button>
+      <button type="button" data-action="close" data-i18n-title="action.close" title="关闭">×</button>
+    </div>
+  </div>
+  <div class="lines">
+    <div class="line" data-module="cpu"><span class="k">CPU</span><span data-field="cpu" data-format="bar"></span></div>
+    <div class="line" data-module="mem"><span class="k">MEM</span><span data-field="mem" data-format="bar"></span></div>
+    <div class="line" data-module="disk"><span class="k">DSK</span><span data-field="disk" data-format="bar"></span></div>
+    <div class="line" data-module="net"><span class="k">NET</span><span>↓ <span data-field="down" data-format="rate">0</span>  ↑ <span data-field="up" data-format="rate">0</span></span></div>
+  </div>
+  <div class="foot">up <span data-field="uptime" data-format="uptime">0分钟</span></div>
+  <section class="procs">
+    <div class="procs-clip">
+      <div class="procs-head"><span data-i18n="term.rank">TOP</span><div class="sorts"><button type="button" data-sort="cpu" data-i18n="sort.cpu">CPU</button><button type="button" data-sort="mem" data-i18n="sort.mem">MEM</button><button type="button" data-sort="net" data-i18n="sort.net">NET</button></div></div>
+      <div data-procs></div>
+    </div>
+  </section>
+</div>

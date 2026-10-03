@@ -1,0 +1,10 @@
+{
+  "id": "neon",
+  "name": "霓虹",
+  "author": "NetPulsar",
+  "description": "赛博抬头显示",
+  "version": "1.0.0",
+  "width": 340,
+  "height": 280,
+  "accent": "#27f3ff"
+}

@@ -1,0 +1,38 @@
+<div class="paper">
+  <div class="top" data-drag data-chrome>
+    <div>
+      <div class="mark" data-i18n="brand">NETPULSAR</div>
+      <h1 data-i18n="paper.now">此刻</h1>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="pin" data-i18n-title="action.pin" title="置顶">⌖</button>
+      <button type="button" data-action="settings" data-i18n-title="action.settings" title="设置">⚙</button>
+      <button type="button" data-action="close" data-i18n-title="action.close" title="关闭">×</button>
+    </div>
+  </div>
+  <div class="sub"><span data-host><span data-field="host"></span> · </span><span data-i18n="paper.ran">已运行</span> <span data-field="uptime" data-format="uptime"></span></div>
+  <div class="rows">
+    <div class="row" data-module="cpu">
+      <div><b data-i18n="paper.cpu">处理器</b><small data-i18n="paper.cpuHint">整机占用</small></div>
+      <strong data-field="cpu" data-format="pct">0%</strong>
+    </div>
+    <div class="row" data-module="mem">
+      <div><b data-i18n="paper.mem">内存</b><small><span data-field="memUsed" data-format="bytes">0</span> / <span data-field="memTotal" data-format="bytes">0</span></small></div>
+      <strong data-field="mem" data-format="pct">0%</strong>
+    </div>
+    <div class="row" data-module="net">
+      <div><b data-i18n="paper.net">网络</b><small>↓ <span data-field="down" data-format="rate">0</span> · ↑ <span data-field="up" data-format="rate">0</span></small></div>
+      <strong data-field="down" data-format="rate">0</strong>
+    </div>
+    <div class="row" data-module="disk">
+      <div><b data-i18n="paper.disk">磁盘</b><small><span data-field="diskUsed" data-format="bytes">0</span> / <span data-field="diskTotal" data-format="bytes">0</span></small></div>
+      <strong data-field="disk" data-format="pct">0%</strong>
+    </div>
+  </div>
+  <section class="procs">
+    <div class="procs-clip">
+      <div class="procs-head"><span data-i18n="rank.title">占用排行</span><div class="sorts"><button type="button" data-sort="cpu" data-i18n="sort.cpu">CPU</button><button type="button" data-sort="mem" data-i18n="sort.mem">内存</button><button type="button" data-sort="net" data-i18n="sort.net">网速</button></div></div>
+      <div data-procs></div>
+    </div>
+  </section>
+</div>

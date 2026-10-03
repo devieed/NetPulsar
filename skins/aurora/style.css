@@ -1,0 +1,57 @@
+.aurora {
+  --fg: #eef3ff;
+  --muted: rgba(226, 232, 255, .62);
+  --track: rgba(255, 255, 255, .1);
+  --bar: linear-gradient(90deg, #8eb6ff, #67e8f9);
+  --accent: #9eb6ff;
+  --line: rgba(255, 255, 255, .1);
+  position: relative;
+  width: 304px;
+  box-sizing: border-box;
+  padding: 14px 14px 12px;
+  border-radius: 22px;
+  color: var(--fg);
+  background:
+    radial-gradient(140px 90px at var(--mx, 30%) var(--my, 0%), rgba(150, 190, 255, .22), transparent 72%),
+    linear-gradient(165deg, rgba(32, 38, 64, .94), rgba(12, 14, 24, .96));
+  border: 1px solid rgba(255, 255, 255, .16);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .38), inset 0 1px 0 rgba(255, 255, 255, .2);
+}
+
+.aurora .top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.aurora .brand { display: flex; gap: 8px; align-items: center; }
+.aurora .orb {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #7dffe1;
+  box-shadow: 0 0 10px #7dffe1;
+}
+.aurora .brand b { display: block; font-size: 11px; letter-spacing: .16em; font-weight: 650; }
+.aurora .brand small { display: block; margin-top: 1px; font-size: 10px; color: var(--muted); letter-spacing: 0; }
+
+.aurora .meters { display: flex; justify-content: space-between; padding: 0 8px; }
+.aurora .ring {
+  width: 76px; height: 76px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: conic-gradient(from -90deg, var(--c1), var(--c2) calc(var(--p, 0) * 1%), rgba(255, 255, 255, .08) 0);
+}
+.aurora .ring.cpu { --c1: #7aa2ff; --c2: #67e8f9; }
+.aurora .ring.mem { --c1: #c084fc; --c2: #f0abfc; }
+.aurora .ring.disk { --c1: #fbbf24; --c2: #fb7185; }
+.aurora .hole {
+  width: 58px; height: 58px; border-radius: 50%;
+  background: rgba(16, 18, 32, .94);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+.aurora .hole b { font-size: 16px; font-weight: 650; letter-spacing: -.03em; line-height: 1; }
+.aurora .hole small { margin-top: 3px; font-size: 9px; letter-spacing: .14em; color: var(--muted); }
+
+.aurora .net {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 10px; padding-top: 8px;
+  border-top: 1px solid rgba(255, 255, 255, .08);
+}
+.aurora .rate { min-width: 78px; font-size: 12px; }
+.aurora .rate em { font-style: normal; color: #8ecbff; margin-right: 3px; }
+.aurora .rate.up em { color: #e0c2ff; }
+.aurora .rate b { font-weight: 620; }
+.aurora canvas { width: 108px; height: 28px; flex: 1; display: block; }

@@ -1,0 +1,40 @@
+<div class="neon">
+  <i class="corner a"></i><i class="corner b"></i><i class="corner c"></i><i class="corner d"></i>
+  <div class="top" data-drag data-chrome>
+    <div class="brand"><span data-i18n="neon.brand">NP-04</span> <em data-i18n="neon.live">LIVE</em></div>
+    <div class="actions">
+      <button type="button" data-action="pin" data-i18n-title="action.pin" title="置顶">⌖</button>
+      <button type="button" data-action="settings" data-i18n-title="action.settings" title="设置">⚙</button>
+      <button type="button" data-action="close" data-i18n-title="action.close" title="关闭">×</button>
+    </div>
+  </div>
+  <div class="grid">
+    <div class="cell cpu" data-module="cpu">
+      <span data-i18n="label.cpu">CPU</span>
+      <b data-field="cpu" data-format="pct">0%</b>
+      <div class="cores" data-cores></div>
+    </div>
+    <div class="cell mem" data-module="mem">
+      <span data-i18n="label.mem">MEM</span>
+      <b data-field="mem" data-format="pct">0%</b>
+      <small><span data-field="memUsed" data-format="bytes">0</span></small>
+    </div>
+    <div class="cell net" data-module="net">
+      <span data-i18n="label.down">DOWN</span>
+      <b data-field="down" data-format="rate">0 B/s</b>
+      <small>↑ <span data-field="up" data-format="rate">0 B/s</span></small>
+    </div>
+    <div class="cell disk" data-module="disk">
+      <span data-i18n="label.disk">DISK</span>
+      <b data-field="disk" data-format="pct">0%</b>
+      <small><span data-i18n="label.diskio">读写</span> <span data-field="diskRead" data-format="rate">0</span></small>
+    </div>
+  </div>
+  <section class="procs">
+    <div class="procs-clip">
+      <div class="procs-head"><span data-i18n="rank.title">占用排行</span><div class="sorts"><button type="button" data-sort="cpu" data-i18n="sort.cpu">CPU</button><button type="button" data-sort="mem" data-i18n="sort.mem">内存</button><button type="button" data-sort="net" data-i18n="sort.net">网速</button></div></div>
+      <div data-procs></div>
+    </div>
+  </section>
+  <div class="scan"></div>
+</div>

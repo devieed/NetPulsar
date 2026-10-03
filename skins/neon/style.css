@@ -1,0 +1,56 @@
+.neon {
+  --fg: #e8fbff;
+  --muted: rgba(170, 245, 255, .58);
+  --track: rgba(39, 243, 255, .12);
+  --bar: linear-gradient(90deg, #27f3ff, #ff2bd6);
+  --accent: #27f3ff;
+  --line: rgba(39, 243, 255, .2);
+  position: relative;
+  width: 286px;
+  box-sizing: border-box;
+  padding: 16px 14px 12px;
+  border-radius: 6px;
+  color: var(--fg);
+  background: rgba(6, 8, 14, .94);
+  border: 1px solid rgba(39, 243, 255, .38);
+  box-shadow: 0 0 22px rgba(39, 243, 255, .14), 0 18px 40px rgba(0, 0, 0, .5);
+  font-family: "Segoe UI", "Microsoft YaHei UI", sans-serif;
+}
+
+.neon .corner { position: absolute; width: 12px; height: 12px; pointer-events: none; }
+.neon .corner.a { top: 5px; left: 5px; border-top: 1.5px solid #27f3ff; border-left: 1.5px solid #27f3ff; }
+.neon .corner.b { top: 5px; right: 5px; border-top: 1.5px solid #ff2bd6; border-right: 1.5px solid #ff2bd6; }
+.neon .corner.c { bottom: 5px; left: 5px; border-bottom: 1.5px solid #ff2bd6; border-left: 1.5px solid #ff2bd6; }
+.neon .corner.d { bottom: 5px; right: 5px; border-bottom: 1.5px solid #27f3ff; border-right: 1.5px solid #27f3ff; }
+
+.neon .top, .neon .grid, .neon .procs { position: relative; z-index: 1; }
+.neon .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.neon .brand { font-size: 11px; letter-spacing: .18em; color: #27f3ff; }
+.neon .brand em { font-style: normal; color: #ff2bd6; margin-left: 6px; }
+
+.neon .grid { display: flex; flex-wrap: wrap; }
+.neon .cell { width: 50%; box-sizing: border-box; padding: 6px 6px 4px; }
+.neon .cell span { display: block; font-size: 10px; letter-spacing: .18em; color: var(--muted); }
+.neon .cell b { display: block; margin-top: 2px; font-size: 22px; font-weight: 560; letter-spacing: -.04em; line-height: 1.1; }
+.neon .cell small { display: block; margin-top: 3px; font-size: 10px; color: var(--muted); }
+.neon .cpu b { color: #d9fbff; text-shadow: 0 0 14px rgba(39, 243, 255, .85); }
+.neon .mem b { color: #ffd6f6; text-shadow: 0 0 14px rgba(255, 43, 214, .7); }
+.neon .net b { color: #d9fbff; font-size: 16px; text-shadow: 0 0 12px rgba(39, 243, 255, .7); }
+.neon .disk b { color: #ffe7a3; text-shadow: 0 0 12px rgba(255, 196, 80, .45); }
+
+.neon .cores { display: flex; gap: 2px; align-items: flex-end; height: 18px; margin-top: 6px; }
+.neon .cores i {
+  flex: 1;
+  height: calc(var(--p, 2) * 1%);
+  min-height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(#27f3ff, rgba(39, 243, 255, .15));
+}
+
+.neon .scan {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: repeating-linear-gradient(to bottom, transparent 0 3px, rgba(0, 0, 0, .16) 3px 4px);
+}

@@ -1,0 +1,33 @@
+.tide {
+  --fg: #e7f7ff;
+  --muted: rgba(190, 225, 240, .66);
+  --track: rgba(255, 255, 255, .12);
+  --bar: linear-gradient(90deg, #5eead4, #7dd3fc);
+  --accent: #7ee0ff;
+  --line: rgba(255, 255, 255, .1);
+  width: 508px;
+  box-sizing: border-box;
+  padding: 10px 12px 10px 12px;
+  border-radius: 18px;
+  color: var(--fg);
+  background: linear-gradient(100deg, rgba(8, 20, 32, .96), rgba(14, 36, 52, .94));
+  border: 1px solid rgba(150, 220, 255, .24);
+  box-shadow: 0 14px 34px rgba(0, 12, 24, .38), inset 0 1px 0 rgba(255, 255, 255, .14);
+}
+
+.tide .row { display: flex; align-items: center; gap: 12px; }
+.tide .logo {
+  width: 32px; height: 32px; border-radius: 10px; flex: none;
+  display: grid; place-items: center;
+  background: linear-gradient(145deg, #5eead4, #38bdf8);
+  color: #06202a; font-size: 11px; font-weight: 800; letter-spacing: .04em;
+}
+.tide .cell { min-width: 68px; }
+.tide .cell.wide { min-width: 120px; }
+.tide .cell span { display: block; font-size: 10px; letter-spacing: .14em; color: var(--muted); }
+.tide .cell b { display: block; margin-top: 1px; font-size: 14px; font-weight: 640; }
+.tide .cell small { display: block; margin-top: 1px; font-size: 11px; color: var(--muted); }
+.tide em { font-style: normal; color: #7ee0ff; }
+.tide .mini { display: block; height: 3px; margin-top: 5px; border-radius: 99px; background: var(--track); overflow: hidden; }
+.tide .mini i { display: block; height: 100%; width: 0; background: var(--bar); border-radius: inherit; }
+.tide .actions { margin-left: auto; }

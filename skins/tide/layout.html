@@ -1,0 +1,36 @@
+<div class="tide">
+  <div class="row" data-drag data-chrome>
+    <div class="logo">NP</div>
+    <div class="cell" data-module="cpu">
+      <span data-i18n="label.cpu">CPU</span>
+      <b data-field="cpu" data-format="pct">0%</b>
+      <span class="mini"><i data-bar="cpu"></i></span>
+    </div>
+    <div class="cell" data-module="mem">
+      <span data-i18n="label.mem">内存</span>
+      <b data-field="mem" data-format="pct">0%</b>
+      <span class="mini"><i data-bar="mem"></i></span>
+    </div>
+    <div class="cell wide" data-module="net">
+      <span data-i18n="label.net">网络</span>
+      <b><em>↓</em> <span data-field="down" data-format="rate">0</span></b>
+      <small><em>↑</em> <span data-field="up" data-format="rate">0</span></small>
+    </div>
+    <div class="cell" data-module="disk">
+      <span data-i18n="label.disk">磁盘</span>
+      <b data-field="disk" data-format="pct">0%</b>
+      <span class="mini"><i data-bar="disk"></i></span>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="pin" data-i18n-title="action.pin" title="置顶">⌖</button>
+      <button type="button" data-action="settings" data-i18n-title="action.settings" title="设置">⚙</button>
+      <button type="button" data-action="close" data-i18n-title="action.close" title="关闭">×</button>
+    </div>
+  </div>
+  <section class="procs">
+    <div class="procs-clip">
+      <div class="procs-head"><span data-i18n="rank.title">占用排行</span><div class="sorts"><button type="button" data-sort="cpu" data-i18n="sort.cpu">CPU</button><button type="button" data-sort="mem" data-i18n="sort.mem">内存</button><button type="button" data-sort="net" data-i18n="sort.net">网速</button></div></div>
+      <div data-procs></div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,10 @@
+{
+  "id": "terminus",
+  "name": "终端",
+  "author": "NetPulsar",
+  "description": "绿色磷光，像一台小显示器",
+  "version": "1.0.0",
+  "width": 400,
+  "height": 280,
+  "accent": "#3dff8a"
+}

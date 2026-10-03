@@ -1,0 +1,114 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*' 
+      - '[0-9]*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    permissions:
+      contents: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Windows uses the pure-Go WebView2 loader, so it can be cross-compiled.
+          - goos: windows
+            goarch: amd64
+            output_name: NetPulsar.exe
+            asset_name: NetPulsar-windows-amd64
+            runner: ubuntu-24.04
+            cgo: "0"
+            tags: production
+            ldflags: "-H windowsgui -s -w"
+          - goos: windows
+            goarch: arm64
+            output_name: NetPulsar.exe
+            asset_name: NetPulsar-windows-arm64
+            runner: ubuntu-24.04
+            cgo: "0"
+            tags: production
+            ldflags: "-H windowsgui -s -w"
+          # Linux and macOS frontends are cgo (GTK/WebKit and Cocoa). They must be built on that OS.
+          - goos: linux
+            goarch: amd64
+            output_name: NetPulsar
+            asset_name: NetPulsar-linux-amd64
+            runner: ubuntu-24.04
+            cgo: "1"
+            tags: production,webkit2_41
+            ldflags: "-s -w"
+          - goos: linux
+            goarch: arm64
+            output_name: NetPulsar
+            asset_name: NetPulsar-linux-arm64
+            runner: ubuntu-24.04-arm
+            cgo: "1"
+            tags: production,webkit2_41
+            ldflags: "-s -w"
+          - goos: darwin
+            goarch: amd64
+            output_name: NetPulsar
+            asset_name: NetPulsar-darwin-amd64
+            runner: macos-latest
+            cgo: "1"
+            tags: production
+            ldflags: "-s -w"
+          - goos: darwin
+            goarch: arm64
+            output_name: NetPulsar
+            asset_name: NetPulsar-darwin-arm64
+            runner: macos-latest
+            cgo: "1"
+            tags: production
+            ldflags: "-s -w"
+
+    runs-on: ${{ matrix.runner }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.27.1'
+          cache: true
+
+      - name: Install Linux webview libraries
+        if: matrix.goos == 'linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
+
+      - name: Build binary
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: ${{ matrix.cgo }}
+        run: |
+          go build -tags "${{ matrix.tags }}" -ldflags "${{ matrix.ldflags }}" -o ${{ matrix.output_name }} .
+
+      - name: Prepare release archive
+        shell: bash
+        run: |
+          DIST_DIR="${{ matrix.asset_name }}"
+          mkdir -p "$DIST_DIR"
+          
+          cp ${{ matrix.output_name }} "$DIST_DIR/"
+          cp README.md "$DIST_DIR/" 2>/dev/null || true
+          
+          if [ -d "skins" ]; then cp -r skins "$DIST_DIR/"; fi
+          if [ -d "locales" ]; then cp -r locales "$DIST_DIR/"; fi
+
+          zip -r "${{ matrix.asset_name }}.zip" "$DIST_DIR"
+
+      - name: Create Release and Upload Asset
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: ${{ matrix.asset_name }}.zip
+          generate_release_notes: true

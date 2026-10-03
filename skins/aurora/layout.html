@@ -1,0 +1,60 @@
+<!--
+  Skin contract:
+  data-field   cpu mem disk down up host uptime memUsed memTotal diskUsed diskTotal diskRead diskWrite
+  data-format  pct | rate | bytes | bar | uptime
+  data-ring / data-bar   percentage, written to --p
+  data-module  cpu | mem | net | disk
+  data-cores   filled with per-core usage
+  data-procs   process list shown on hover
+  data-sort    cpu | mem | net
+  data-action  settings | close | pin
+  data-i18n    string key from locales/*.json
+  data-host    computer name, can be hidden in settings
+  data-chrome  title bar kept visible while settings is open
+  data-drag    drag handle
+-->
+<div class="aurora">
+  <div class="top" data-drag data-chrome>
+    <div class="brand">
+      <span class="orb"></span>
+      <div>
+        <b data-i18n="brand">NETPULSAR</b>
+        <small data-host data-field="host"></small>
+      </div>
+    </div>
+    <div class="actions">
+      <button type="button" data-action="pin" data-i18n-title="action.pin" title="置顶">⌖</button>
+      <button type="button" data-action="settings" data-i18n-title="action.settings" title="设置">⚙</button>
+      <button type="button" data-action="close" data-i18n-title="action.close" title="关闭">×</button>
+    </div>
+  </div>
+  <div class="meters">
+    <div class="meter" data-module="cpu">
+      <div class="ring cpu" data-ring="cpu"><div class="hole"><b data-field="cpu">0</b><small data-i18n="label.cpu">CPU</small></div></div>
+    </div>
+    <div class="meter" data-module="mem">
+      <div class="ring mem" data-ring="mem"><div class="hole"><b data-field="mem">0</b><small data-i18n="label.mem">内存</small></div></div>
+    </div>
+    <div class="meter" data-module="disk">
+      <div class="ring disk" data-ring="disk"><div class="hole"><b data-field="disk">0</b><small data-i18n="label.disk">磁盘</small></div></div>
+    </div>
+  </div>
+  <div class="net" data-module="net">
+    <div class="rate"><em>↓</em><b data-field="down" data-format="rate">0 B/s</b></div>
+    <canvas data-spark="down"></canvas>
+    <div class="rate up"><em>↑</em><b data-field="up" data-format="rate">0 B/s</b></div>
+  </div>
+  <section class="procs">
+    <div class="procs-clip">
+      <div class="procs-head">
+        <span data-i18n="rank.title">占用排行</span>
+        <div class="sorts">
+          <button type="button" data-sort="cpu" data-i18n="sort.cpu">CPU</button>
+          <button type="button" data-sort="mem" data-i18n="sort.mem">内存</button>
+          <button type="button" data-sort="net" data-i18n="sort.net">网速</button>
+        </div>
+      </div>
+      <div data-procs></div>
+    </div>
+  </section>
+</div>

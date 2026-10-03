@@ -1,0 +1,10 @@
+{
+  "id": "aurora",
+  "name": "极光",
+  "author": "NetPulsar",
+  "description": "磨砂玻璃与三枚光环",
+  "version": "1.0.0",
+  "width": 360,
+  "height": 250,
+  "accent": "#8eb6ff"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "paper",
+  "name": "素纸",
+  "author": "NetPulsar",
+  "description": "暖白纸页，适合浅色桌面",
+  "version": "1.0.0",
+  "width": 340,
+  "height": 340,
+  "accent": "#c4553a"
+}

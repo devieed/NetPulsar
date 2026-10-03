@@ -1,0 +1,10 @@
+{
+  "id": "tide",
+  "name": "潮汐",
+  "author": "NetPulsar",
+  "description": "贴在桌面边缘的细长条",
+  "version": "1.0.0",
+  "width": 580,
+  "height": 150,
+  "accent": "#7ee0ff"
+}

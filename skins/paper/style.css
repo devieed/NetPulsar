@@ -1,0 +1,35 @@
+.paper {
+  --fg: #241c16;
+  --muted: rgba(36, 28, 22, .55);
+  --track: rgba(36, 28, 22, .1);
+  --bar: #c4553a;
+  --accent: #c4553a;
+  --line: rgba(36, 28, 22, .12);
+  width: 276px;
+  box-sizing: border-box;
+  padding: 16px 16px 12px;
+  border-radius: 8px;
+  color: var(--fg);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .35), transparent 28%),
+    #f3eee4;
+  box-shadow: 0 14px 34px rgba(70, 48, 24, .16), 0 0 0 1px rgba(36, 28, 22, .06);
+  font-family: "Palatino Linotype", Palatino, "Songti SC", "SimSun", serif;
+}
+
+.paper .top { display: flex; justify-content: space-between; align-items: flex-start; }
+.paper .mark { font-family: "Segoe UI", "Microsoft YaHei UI", sans-serif; font-size: 10px; letter-spacing: .22em; color: #c4553a; }
+.paper h1 { margin: 2px 0 0; font-size: 28px; font-weight: 560; letter-spacing: -.03em; line-height: 1; }
+.paper .sub { margin-top: 6px; font-family: "Segoe UI", "Microsoft YaHei UI", sans-serif; font-size: 11px; color: var(--muted); }
+.paper .rows { display: flex; flex-direction: column; margin-top: 8px; }
+.paper .row {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(36, 28, 22, .1);
+}
+.paper .row b { display: block; font-size: 15px; font-weight: 600; }
+.paper .row small { display: block; margin-top: 2px; font-family: "Segoe UI", "Microsoft YaHei UI", sans-serif; font-size: 11px; color: var(--muted); }
+.paper .row strong { font-size: 16px; font-weight: 600; letter-spacing: -.03em; }
+.paper button[data-action] { color: rgba(36, 28, 22, .55); }
+.paper button[data-sort] { color: rgba(36, 28, 22, .5); }
+.paper button[data-sort].is-on { color: #c4553a; }
