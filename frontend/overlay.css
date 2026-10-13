@@ -313,11 +313,61 @@ input[type="range"] {
 }
 
 .hint {
-  margin: 0 0 6px;
+  margin: 0 0 8px;
   font-size: 11px;
-  line-height: 1.4;
-  color: rgba(210, 220, 240, .5);
+  line-height: 1.45;
+  color: rgba(180, 196, 220, .62);
 }
+
+.iface-pick { position: relative; }
+.iface-current {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  text-align: left;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, .1);
+  background: rgba(255, 255, 255, .04);
+  color: #e7edf8;
+  padding: 8px 10px;
+  font-size: 13px;
+}
+.iface-current span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.iface-current::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid rgba(210, 220, 240, .75);
+  border-bottom: 1.5px solid rgba(210, 220, 240, .75);
+  transform: translateY(-2px) rotate(45deg);
+  flex: none;
+}
+.iface-pick.is-open .iface-current::after { transform: translateY(2px) rotate(225deg); }
+.iface-menu {
+  display: grid;
+  gap: 4px;
+  margin-top: 6px;
+  max-height: 168px;
+  overflow: auto;
+}
+.iface-menu button {
+  width: 100%;
+  text-align: left;
+  border: 0;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, .05);
+  color: #e7edf8;
+  padding: 7px 10px;
+  font-size: 12px;
+}
+.iface-menu button.on,
+.iface-menu button:hover { background: #6d8dff; color: #fff; }
 
 .seg { display: flex; gap: 4px; }
 .seg button {

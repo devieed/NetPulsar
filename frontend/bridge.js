@@ -27,6 +27,8 @@
   const shownNum = {};
   let painting = false;
 
+  let ifaces = [];
+  let ifaceAuto = "";
   let trayOn = false;
 
   function t(key) {
@@ -464,6 +466,16 @@
         </div>
       </div>
       <div class="set-block">
+        <div class="set-label"><span>${esc(t("settings.iface"))}</span></div>
+        <p class="hint">${esc(t("settings.ifaceHint"))}</p>
+        <div class="iface-pick" id="net-iface">
+          <button type="button" class="iface-current" id="net-iface-btn">
+            <span id="net-iface-label">${esc(ifaceLabel(settings.netIface || ""))}</span>
+          </button>
+          <div class="iface-menu" id="net-iface-menu" hidden>${ifaceMenu()}</div>
+        </div>
+      </div>
+      <div class="set-block">
         <div class="set-label"><span>${esc(t("settings.refresh"))}</span><span id="lab-refresh"></span></div>
         <input id="refresh" type="range" min="250" max="3000" step="50" value="${settings.refreshMs}" />
       </div>
@@ -531,6 +543,22 @@
     bindSettings(root);
     const body = $(".set-body", root);
     if (body) body.scrollTop = scroll;
+  }
+
+  function ifaceLabel(name) {
+    if (!name) return t("settings.ifaceAuto") + (ifaceAuto ? " · " + ifaceAuto : "");
+    return name;
+  }
+
+  function ifaceMenu() {
+    const names = ifaces.slice();
+    const chosen = settings.netIface || "";
+    if (chosen && names.indexOf(chosen) < 0) names.push(chosen);
+    const items = [{ id: "", label: ifaceLabel("") }];
+    names.forEach((name) => items.push({ id: name, label: name }));
+    return items.map((item) =>
+      `<button type="button" data-iface="${esc(item.id)}" class="${item.id === chosen ? "on" : ""}">${esc(item.label)}</button>`
+    ).join("");
   }
 
   function paintLabels() {
@@ -615,6 +643,25 @@
         renderSettings();
       });
     });
+    const nic = $("#net-iface");
+    const nicBtn = $("#net-iface-btn");
+    const nicMenu = $("#net-iface-menu");
+    if (nic && nicBtn && nicMenu) {
+      nicBtn.addEventListener("click", () => {
+        nicMenu.hidden = !nicMenu.hidden;
+        nic.classList.toggle("is-open", !nicMenu.hidden);
+      });
+      nicMenu.querySelectorAll("[data-iface]").forEach((item) => {
+        item.addEventListener("click", () => {
+          queue({ netIface: item.dataset.iface || "" });
+          nicMenu.querySelectorAll("[data-iface]").forEach((el) => el.classList.toggle("on", el === item));
+          const label = $("#net-iface-label");
+          if (label) label.textContent = item.textContent;
+          nicMenu.hidden = true;
+          nic.classList.remove("is-open");
+        });
+      });
+    }
     bindRange("refresh", "refreshMs", (v) => v);
     bindRange("opacity", "opacity", (v) => v / 100);
     bindRange("peek", "peekPx", (v) => v);
@@ -680,6 +727,8 @@
     skins = boot.skins || skins;
     skinDir = boot.skinDir || skinDir;
     configDir = boot.configDir || configDir;
+    ifaces = boot.ifaces || [];
+    ifaceAuto = boot.ifaceAuto || "";
     renderSettings();
     $("#skin").hidden = true;
     $("#settings").hidden = false;
@@ -826,6 +875,8 @@
       applyI18n($("#skin"));
       applyChrome();
       trayOn = !!bootData.tray;
+      ifaces = bootData.ifaces || [];
+      ifaceAuto = bootData.ifaceAuto || "";
       applyTray();
       runtime.EventsOn("open-settings", () => {
         api.Reveal();

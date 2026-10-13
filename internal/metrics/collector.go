@@ -54,11 +54,21 @@ type counter struct {
 	ok    bool
 }
 
+// nicCum is one interface's cumulative counters. Rates are computed per interface
+// so a newly appeared adapter does not dump its lifetime total into one sample.
+type nicCum struct {
+	recv uint64
+	sent uint64
+}
+
 // Collector samples CPU, memory, disk, network, and processes. Process objects are reused;
 // otherwise every CPU reading is a first sample and stays at zero.
 type Collector struct {
 	procs map[int32]*process.Process
-	net   counter
+	nics  map[string]nicCum
+	netAt time.Time
+	netOK bool
+	iface string
 	disk  counter
 	rates rates
 	host  string
@@ -83,6 +93,7 @@ func New() *Collector {
 	}
 	c := &Collector{
 		procs:   map[int32]*process.Process{},
+		nics:    map[string]nicCum{},
 		names:   map[int32]string{},
 		ticks:   map[int32]cpuTick{},
 		netPrev: map[int32]netCum{},
@@ -158,15 +169,36 @@ type rates struct {
 	down, up, read, write float64
 }
 
+// SetIface chooses the single interface whose throughput is shown. An empty name picks one automatically.
+func (c *Collector) SetIface(name string) { c.iface = name }
+
 func (c *Collector) sampleNetDisk(now time.Time) {
-	var recv, sent uint64
 	if counters, err := gnet.IOCounters(true); err == nil {
+		all := make(map[string]nicCum, len(counters))
+		names := make([]string, 0, len(counters))
 		for _, it := range counters {
 			if isLoopback(it.Name) {
 				continue
 			}
-			recv += it.BytesRecv
-			sent += it.BytesSent
+			all[it.Name] = nicCum{recv: it.BytesRecv, sent: it.BytesSent}
+			names = append(names, it.Name)
+		}
+		cur := map[string]nicCum{}
+		if name := ChooseInterface(names, c.iface); name != "" {
+			cur[name] = all[name]
+		}
+		if c.netOK {
+			dt := now.Sub(c.netAt)
+			// A wake can sample again almost immediately. Dividing a small burst by that gap looks like GB/s.
+			if dt >= 100*time.Millisecond {
+				c.rates.down, c.rates.up = nicRates(c.nics, cur, dt)
+				c.nics = cur
+				c.netAt = now
+			}
+		} else {
+			c.nics = cur
+			c.netAt = now
+			c.netOK = true
 		}
 	}
 	var read, write uint64
@@ -176,15 +208,42 @@ func (c *Collector) sampleNetDisk(now time.Time) {
 			write += it.WriteBytes
 		}
 	}
-	if c.net.ok {
-		dt := now.Sub(c.net.at)
-		c.rates.down = bytesPerSecond(c.net.recv, recv, dt)
-		c.rates.up = bytesPerSecond(c.net.sent, sent, dt)
+	if c.disk.ok {
+		dt := now.Sub(c.disk.at)
 		c.rates.read = bytesPerSecond(c.disk.read, read, dt)
 		c.rates.write = bytesPerSecond(c.disk.write, write, dt)
 	}
-	c.net = counter{recv: recv, sent: sent, at: now, ok: true}
 	c.disk = counter{read: read, write: write, at: now, ok: true}
+}
+
+// maxByteRate drops a single reading above ~16 Gbps. That is a counter glitch, not a link.
+const maxByteRate = 2 * 1024 * 1024 * 1024
+
+func nicRates(prev, cur map[string]nicCum, dt time.Duration) (down, up float64) {
+	sec := dt.Seconds()
+	if sec <= 0 {
+		return 0, 0
+	}
+	for name, now := range cur {
+		old, ok := prev[name]
+		if !ok {
+			continue
+		}
+		down += boundedRate(old.recv, now.recv, sec)
+		up += boundedRate(old.sent, now.sent, sec)
+	}
+	return down, up
+}
+
+func boundedRate(prev, cur uint64, sec float64) float64 {
+	if sec <= 0 || cur < prev {
+		return 0
+	}
+	rate := float64(cur-prev) / sec
+	if rate > maxByteRate {
+		return 0
+	}
+	return rate
 }
 
 type cpuTick struct {
@@ -268,8 +327,8 @@ func netRates(prev, cur map[int32]netCum, dt time.Duration) map[int32][2]float64
 			continue
 		}
 		out[pid] = [2]float64{
-			float64(now.in-old.in) / sec,
-			float64(now.out-old.out) / sec,
+			boundedRate(old.in, now.in, sec),
+			boundedRate(old.out, now.out, sec),
 		}
 	}
 	return out

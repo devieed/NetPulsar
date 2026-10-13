@@ -32,6 +32,7 @@ go build -tags production -ldflags "-H windowsgui" -o NetPulsar.exe .
 Saved at `%AppData%\NetPulsar\settings.json` on Windows (`~/Library/Application Support/NetPulsar` on macOS, `~/.config/NetPulsar` on Linux).
 
 - Refresh interval, opacity, widget scale, window glow, always on top, computer name, smooth rings and sparklines
+- Which network adapter to count. Automatic prefers a physical Ethernet or Wi-Fi adapter
 - Edge hide and auto hide, peek size, snap distance
 - Module order, ranking order (CPU / memory / network), row count
 - Click a process to open its folder or copy its name, PID, usage, and path

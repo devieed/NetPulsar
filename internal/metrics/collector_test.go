@@ -5,6 +5,42 @@ import (
 	"time"
 )
 
+func TestNicRatesIgnoreNewAndGlitchedInterfaces(t *testing.T) {
+	prev := map[string]nicCum{
+		"Ethernet": {recv: 1_000_000, sent: 500_000},
+	}
+	cur := map[string]nicCum{
+		"Ethernet":        {recv: 1_500_000, sent: 500_000},
+		"vEthernet (WSL)": {recv: 80 << 30, sent: 40 << 30},
+		"Ethernet 2":      {recv: 1_000_000 + 5<<30, sent: 0},
+	}
+	down, up := nicRates(prev, cur, time.Second)
+	if down != 500_000 || up != 0 {
+		t.Fatalf("down=%v up=%v", down, up)
+	}
+	glitch := map[string]nicCum{"Ethernet": {recv: 1_000_000, sent: 500_000 + 8<<30}}
+	_, up = nicRates(prev, glitch, time.Second)
+	if up != 0 {
+		t.Fatalf("glitch up=%v", up)
+	}
+}
+
+func TestChooseInterfaceUsesTheRequestedAdapter(t *testing.T) {
+	names := []string{"vEthernet (WSL)", "以太网", "WLAN"}
+	if got := ChooseInterface(names, "WLAN"); got != "WLAN" {
+		t.Fatalf("picked %s", got)
+	}
+	if got := ChooseInterface(names, ""); got != "以太网" {
+		t.Fatalf("auto %s", got)
+	}
+	if got := ChooseInterface(names, "missing"); got != "" {
+		t.Fatalf("missing should stay empty, got %s", got)
+	}
+	if got := ChooseInterface([]string{"vEthernet (Default Switch)"}, ""); got != "vEthernet (Default Switch)" {
+		t.Fatalf("fallback %s", got)
+	}
+}
+
 func TestBytesPerSecond(t *testing.T) {
 	if got := bytesPerSecond(100, 100, time.Second); got != 0 {
 		t.Fatalf("flat counter: got %v", got)

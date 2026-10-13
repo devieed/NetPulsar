@@ -123,6 +123,7 @@ func (a *App) onSecond(args []string) {
 // Bootstrap hands settings, skin and language catalogs, and directories to the page in one call.
 func (a *App) Bootstrap() map[string]any {
 	cur := a.settings.Get()
+	ifaces := metrics.ListInterfaces()
 	return map[string]any{
 		"settings":  cur,
 		"skins":     a.skins.List(),
@@ -132,6 +133,8 @@ func (a *App) Bootstrap() map[string]any {
 		"localeDir": a.locales.Dir,
 		"strings":   a.locales.Merged(cur.Locale),
 		"tray":      tray.Enabled(),
+		"ifaces":    ifaces,
+		"ifaceAuto": metrics.ChooseInterface(ifaces, ""),
 	}
 }
 
@@ -262,6 +265,7 @@ func (a *App) ProcessPath(pid int) (string, error) {
 func (a *App) RestoreSkin(id string) error { return a.skins.Restore(id) }
 
 func (a *App) metricsLoop(ctx context.Context) {
+	a.col.SetIface(a.settings.Get().NetIface)
 	_ = a.col.Sample(a.settings.Get().ProcessSort)
 	for {
 		if !a.displayed.Load() {
@@ -292,6 +296,7 @@ func (a *App) metricsLoop(ctx context.Context) {
 }
 
 func (a *App) publish() {
+	a.col.SetIface(a.settings.Get().NetIface)
 	snap := a.col.Sample(a.settings.Get().ProcessSort)
 	if snap.Cores == nil {
 		snap.Cores = []float64{}

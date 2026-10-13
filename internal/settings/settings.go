@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 	"sync"
 )
 
@@ -36,6 +37,7 @@ type Settings struct {
 	RankOrder     []string `json:"rankOrder"`
 	ProcessLimit  int      `json:"processLimit"`
 	ProcessSort   string   `json:"processSort"`
+	NetIface      string   `json:"netIface"`
 	X             int      `json:"x"`
 	Y             int      `json:"y"`
 	HasPosition   bool     `json:"hasPosition"`
@@ -220,7 +222,16 @@ func sanitize(in Settings, keepPos bool) Settings {
 	}
 	out.Modules = normalizeModules(out.Modules)
 	out.RankOrder = normalizeRank(out.RankOrder)
+	out.NetIface = cleanIface(out.NetIface)
 	return out
+}
+
+func cleanIface(name string) string {
+	name = strings.TrimSpace(name)
+	if strings.ContainsAny(name, "\r\n\x00") || len(name) > 128 {
+		return ""
+	}
+	return name
 }
 
 func normalizeModules(in []string) []string {
